@@ -13,6 +13,7 @@ module.exports.app = app;
 
 // Set what we are listening on.
 app.set('port', 3000);
+//app.set('ip', 'http://127.0.0.1');
 
 // Logging and parsing
 app.use(morgan('dev'));
