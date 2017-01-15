@@ -8,7 +8,15 @@ module.exports = {
 
     // a function which handles a get request for all messages
     get: function (req, res) {
-      models.messages.get(req, res);
+      var message = {
+        id: null,
+        message: req.body.message,
+        room_name: req.body.roomname,
+        user_name: req.body.username,
+      };
+      //passing in message to model below
+      models.messages.get(message);
+      res.end();
     },
 
     // a function which handles posting a message to the database
@@ -30,11 +38,17 @@ module.exports = {
     },
 
     post: function (req, res) {
+      var user = {
+        id: null,
+        user_name: req.body.username
+      };
       if (!req.body.username) {
         res.writeHead(404, 'not able to post user');
         res.end();
       } else {
-        models.users.post(req, res);
+        //passing user details to user models
+        models.users.post(user);
+        res.end();
       }
     }
   }

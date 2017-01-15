@@ -8,26 +8,18 @@ module.exports = {
         if (err) {
           console.log('Error in get message query ', error);
         } else {
-          res.json(result);
+          res.end(result);
         }
       });
     },
     // a function which produces all the messages
-    post: function (req, res) {
-
-      var message = {
-        id: null,
-        message: req.body.message,
-        room_name: req.body.roomname,
-        user_name: req.body.username,
-      };
+    post: function (message) {
 
       db.connection.query('INSERT INTO messages SET ?', message, function (error, results, fields) {
         if (error) {
           throw error;
         } else {
           console.log(message, 'message successfully added to db');
-          res.end();
         }
 
       });
@@ -41,22 +33,17 @@ module.exports = {
         if (err) {
           console.log('Error in get users query ', error);
         } else {
-          res.json(result);
+          res.end(result);
         }
       });
     },
-    post: function (req, res) {
-      var user = {
-        id: null,
-        user_name: req.body.username
-      };
+    post: function (user) {
 
       db.connection.query('INSERT INTO users SET ?', user, function (error, results, field){
         if (error) {
           throw error;
         } else {
           console.log(user, 'user successfully added to db');
-          res.end();
         }
       });
     }
