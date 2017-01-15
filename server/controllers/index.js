@@ -10,7 +10,10 @@ module.exports = {
       res.status(200).send('response');
     },
     post: function (req, res) {
-
+      var username = req.body.username;
+      var roomname = req.body.roomname;
+      var message = req.body.message;
+      database.methods.query([username,roomname,message], 'messages', 'user_name,room_name,message');
       res.status(201).send('response');
      // a function which handles posting a message to the database
     }
@@ -24,7 +27,6 @@ module.exports = {
 
     post: function (req, res) {
       var username = req.body.username;
-      database.methods.input(username);
       database.methods.query(username, 'users', 'user_name');
       res.status(201).send('response');
     }

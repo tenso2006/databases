@@ -25,17 +25,28 @@ module.exports = {
     query: function (input, table, column) {
       var newQuery = connection();
       newQuery.connect();
-      var post  = { username: input };
-      var array = [];
-      array.push(post.username.toString());
-
-      newQuery.query('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")', function (err, results) {
-        if (err) {
-          console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")');
-        } else {
-          console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")');
-        }
-      });
+      var array;
+      if (table === 'users') {
+        array = [input.toString];
+        userQuery.query('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")', function (err, results) {
+          if (err) {
+            console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")');
+          } else {
+            console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array + '")');
+          }
+        });
+      } else {
+        input.forEach(function(input) {
+          array.push(input.toString());
+        });
+        messageQuery.query('INSERT INTO ' + table + ' (' + column + ') Values ("' + array[0] + '","' + array[1] + '""' + array[2] + '")', function (err, results) {
+          if (err) {
+            console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array[0] + '","' + array[1] + '""' + array[2] + '")');
+          } else {
+            console.log('INSERT INTO ' + table + ' (' + column + ') Values ("' + array[0] + '","' + array[1] + '""' + array[2] + '")');
+          }
+        });
+      }
       newQuery.end();
     }
   }
