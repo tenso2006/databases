@@ -16,12 +16,12 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (req, res) {
-    
+
       res.status(200).send('response');
     },
     post: function (req, res) {
       var username = req.body.username;
-      db.query('INSERT into users user_name ?', username);
+
       res.status(201).send('completed');
     }
   }

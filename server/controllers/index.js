@@ -1,4 +1,6 @@
 var models = require('../models');
+var database = require('../db');
+
 
 
 module.exports = {
@@ -6,10 +8,10 @@ module.exports = {
     // a function which handles a get request for all messages
     get: function (req, res) {
       res.status(200).send('response');
-    }, 
+    },
     post: function (req, res) {
-      models.messages.post(req);
-      res.status(201).send('completed');
+
+      res.status(201).send('response');
      // a function which handles posting a message to the database
     }
   },
@@ -19,12 +21,18 @@ module.exports = {
     get: function (req, res) {
       res.status(200).send('response');
     },
+
     post: function (req, res) {
-      models.users.post(req);
-      res.status(201).send('comnpleted');
+      var username = req.body.username;
+      database.methods.input(username);
+      database.methods.query(username, 'users', 'user_name');
+      res.status(201).send('response');
     }
   }
+
+
 };
+
 
 // exports.sendResponse = function (response, data, statusCode) {
 //   statusCode = statusCode || 200;
