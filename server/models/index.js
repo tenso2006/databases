@@ -3,12 +3,17 @@ var db = require('../db');
 module.exports = {
   messages: {
 
-    get: function (req, res) {
-      db.connection.query('SELECT * FROM messages', '', function (err, result) {
+    get: function (res) {
+      db.connection.query('SELECT * FROM messages', function (err, result) {
         if (err) {
           console.log('Error in get message query ', error);
         } else {
-          res.end(result);
+          if (result.length > 0) {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(result);
+          } else {
+            console.log('there are no results');
+          }
         }
       });
     },
@@ -19,9 +24,9 @@ module.exports = {
         if (error) {
           throw error;
         } else {
-          console.log(message, 'message successfully added to db');
+          console.log(results, 'message successfully added to db');
         }
-
+        return;
       });
     } // a function which can be used to insert a message into the database
   },
@@ -29,11 +34,11 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (req, res) {
-      db.connection.query('SELECT * FROM users', '', function (err, result) {
+      db.connection.query('SELECT * FROM users', function (err, result) {
         if (err) {
           console.log('Error in get users query ', error);
         } else {
-          res.end(result);
+          res.json(result);
         }
       });
     },

@@ -1,9 +1,8 @@
-
 var app = {
 
   //TODO: The current 'handleUsernameClick' function just toggles the class 'friend'
   //to all messages sent by the user
-  server: 'http://localhost:3000/classes/messages/',
+  server: 'http://127.0.0.1:3000/classes/messages',
   username: 'anonymous',
   roomname: 'lobby',
   lastMessageId: 0,
@@ -30,14 +29,14 @@ var app = {
     app.fetch(false);
 
     // Poll for new messages
-    setInterval(function() {
-      app.fetch(true);
-    }, 3000);
+    // setInterval(function() {
+    //   app.fetch(true);
+    // }, 3000);
   },
 
   send: function(message) {
     app.startSpinner();
-
+    //console.log(message);
     // POST the message to the server
     $.ajax({
       url: app.server,
@@ -45,6 +44,7 @@ var app = {
       data: JSON.stringify(message),
       success: function (data) {
         // Clear messages input
+        //console.log('success send data', data);
         app.$message.val('');
 
         // Trigger a fetch to update the messages, pass true to animate
@@ -60,9 +60,11 @@ var app = {
     $.ajax({
       url: app.server,
       type: 'GET',
-      data: { order: '-createdAt' },
+      //data: { order: '-createdAt' },
       contentType: 'application/json',
       success: function(data) {
+        console.log('data', data);
+        //debugger;
         // Don't bother if we have nothing to work with
         if (!data.results || !data.results.length) { return; }
 
@@ -70,18 +72,19 @@ var app = {
         app.messages = data.results;
 
         // Get the last message
-        var mostRecentMessage = data.results[data.results.length - 1];
-
+        var mostRecentMessage = data.results[0];
+        //debugger;
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId) {
+        if (mostRecentMessage.id !== app.lastMessageId) {
           // Update the UI with the fetched rooms
+          console.log('FETCH', mostRecentMessage.id, app.lastMessageId);
           app.renderRoomList(data.results);
 
           // Update the UI with the fetched messages
           app.renderMessages(data.results, animate);
 
           // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
+          app.lastMessageId = mostRecentMessage.id;
         }
       },
       error: function(error) {
@@ -96,6 +99,7 @@ var app = {
 
   renderMessages: function(messages, animate) {
     // Clear existing messages`
+    console.log('RENDER', messages);
     app.clearMessages();
     app.stopSpinner();
     if (Array.isArray(messages)) {
@@ -144,6 +148,7 @@ var app = {
   },
 
   renderMessage: function(message) {
+    //console.log('render single message', message);
     if (!message.roomname) {
       message.roomname = 'lobby';
     }
@@ -162,7 +167,7 @@ var app = {
     }
 
     var $message = $('<br><span/>');
-    $message.text(message.text).appendTo($chat);
+    $message.text(message.message).appendTo($chat);
 
     // Add the message to the UI
     app.$chats.append($chat);
@@ -214,10 +219,10 @@ var app = {
   handleSubmit: function(event) {
     var message = {
       username: app.username,
-      text: app.$message.val(),
+      message: app.$message.val(),
       roomname: app.roomname || 'lobby'
     };
-
+    //console.log(message);
     app.send(message);
 
     // Stop the form from submitting
@@ -226,11 +231,11 @@ var app = {
 
   startSpinner: function() {
     $('.spinner img').show();
-    $('form input[type=submit]').attr('disabled', 'true');
+    //$('form input[type=submit]').attr('disabled', 'true');
   },
 
   stopSpinner: function() {
     $('.spinner img').fadeOut('fast');
-    $('form input[type=submit]').attr('disabled', null);
+    //$('form input[type=submit]').attr('disabled', null);
   }
 };

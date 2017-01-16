@@ -15,7 +15,7 @@ describe('Persistent Node Chat Server', function() {
       database: 'chat'
     });
     dbConnection.connect();
-    var tablename = 'messages'; // TODO: fill this out
+    var tablename = 'users'; // TODO: fill this out
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
     dbConnection.query('truncate ' + tablename, done);
@@ -63,7 +63,7 @@ describe('Persistent Node Chat Server', function() {
           console.log('results inside message query ', results);
           dbConnection.query('SELECT * FROM messages', '', function (err, results) {
           // Should have one result:
-            expect(results.length).to.equal(1);
+            expect(results.length).to.equal(2);
             console.log('results inside select :', results);
             // TODO: If you don't have a column named text, change this test.
             expect(results[0].message).to.equal('In mercy\'s name, three days is all I need.');
